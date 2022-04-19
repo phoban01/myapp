@@ -2,11 +2,15 @@ project_name: phctl
 
 before:
   hooks:
-    # - go mod tidy
-    # - go generate ./...
-    #
+    - go mod tidy
+
 release:
   prerelease: "false"
+  extra_files:
+    - glob: config/release/*.yaml
+
+checksum:
+  name_template: "phctl_checksums.txt"
   extra_files:
     - glob: config/release/*.yaml
 
@@ -15,7 +19,7 @@ source:
   name_template: "{{ .ProjectName }}_{{ .Version }}_source_code"
 
 builds:
-  - id: default
+  - id: cli
     main: ./cmd/phctl
     binary: phctl
     env:
@@ -31,12 +35,42 @@ builds:
     goarm:
       - 6
       - 7
+  - id: server
+    main: ./cmd/ph-server
+    binary: ph-server
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - windows
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+      - arm
+    goarm:
+      - 6
+      - 7
 
 archives:
-  - id: default
+  - id: cli
     builds:
-      - default
+      - cli
     name_template: "phctl_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+    format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - none*
+  - id: server
+    builds:
+      - server
+    name_template: "ph-server_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
     replacements:
       darwin: Darwin
       linux: Linux
@@ -49,18 +83,17 @@ archives:
       - none*
 
 brews:
-- tap:
-    owner: phoban01
-    name: homebrew-tap
-  commit_author:
-    name: phoban01
-    email: phoban01@gmail.com
-  folder: Formula
-  homepage: https://example.com
-  install: |
-    bin.install "phctl"
+  - name: phctl
+    ids:
+    - cli
+    tap:
+      owner: phoban01
+      name: homebrew-tap
+    commit_author:
+      name: phoban01
+      email: phoban01@gmail.com
+    folder: Formula
+    homepage: https://example.com
+    install: |
+      bin.install "phctl"
 
-checksum:
-  name_template: "phctl_checksums.txt"
-  extra_files:
-    - glob: config/release/*.yaml
