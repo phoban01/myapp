@@ -6,11 +6,7 @@ before:
     # - go generate ./...
     #
 release:
-  prerelease: "true"
-  extra_files:
-    - glob: config/release/*.yaml
-
-checksum:
+  prerelease: "false"
   extra_files:
     - glob: config/release/*.yaml
 
@@ -66,3 +62,5 @@ brews:
 
 checksum:
   name_template: "phctl_checksums.txt"
+  extra_files:
+    - glob: config/release/*.yaml
