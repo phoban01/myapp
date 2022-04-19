@@ -47,7 +47,7 @@ brews:
     name: phoban01
     email: phoban01@gmail.com
   folder: Formula
-  home: https://example.com
+  homepage: https://example.com
   install: |
     bin.install "phctl"
 
