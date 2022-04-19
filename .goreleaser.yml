@@ -6,6 +6,15 @@ before:
 
 release:
   prerelease: "false"
+  header: |
+    ## Some title ({{ .Date }})
+
+    Welcome to this new release!
+
+  footer: |
+    ## Thanks!
+
+    Those were the changes on {{ .Tag }}!
   extra_files:
     - glob: config/release/*.yaml
 
