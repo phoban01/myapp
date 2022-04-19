@@ -1,5 +1,10 @@
 project_name: phctl
 
+before:
+  hooks:
+    - go mod tidy
+    - go generate ./...
+
 builds:
   - id: default
     main: ./cmd/phctl
@@ -33,6 +38,18 @@ archives:
         format: zip
     files:
       - none*
+
+brews:
+- tap:
+    owner: phoban01
+    name: homebrew-tap
+  commit_author:
+    name: phoban01
+    email: phoban01@gmail.com
+  folder: Formula
+  home: https://example.com
+  install: |
+    bin.install "phctl"
 
 checksum:
   name_template: "phctl_checksums.txt"
