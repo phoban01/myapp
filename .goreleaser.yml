@@ -1,23 +1,14 @@
 project_name: phctl
 
-before:
-  hooks:
-    - go mod tidy
-
 release:
-  draft: true
-  prerelease: auto
+  footer: |
+    [CHANGELOG](https://github.com/weaveworks/tf-controller/blob/main/CHANGELOG.md)
   extra_files:
     - glob: config/release/*.yaml
 
 checksum:
-  name_template: "phctl_checksums.txt"
   extra_files:
     - glob: config/release/*.yaml
-
-source:
-  enabled: true
-  name_template: "{{ .ProjectName }}_{{ .Version }}_source_code"
 
 builds:
   - id: cli
